@@ -1,13 +1,18 @@
 import React from 'react';
 
-const squareStyle = {
+const displayFalse = {
   margin: '100px',
   background: 'gray'
 };
 
+const displayTrue = {
+  margin: '100px',
+  background: 'blue'
+};
+
 
 var Square = props => (
-  <td onClick={()=>(props.handleClick(props.row,props.col))} style={squareStyle}>
+  <td onClick={()=>(props.handleClick(props.row,props.col))} style={props.displayBoard[props.row][props.co] ? displayTrue : displayFalse}>
   </td>
 )
 
