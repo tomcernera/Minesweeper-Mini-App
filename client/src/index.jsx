@@ -7,31 +7,67 @@ class Game extends React.Component {
     super(props);
     this.state = {
       game: 'active',
-      board: Array(10).fill(Array(10).fill(0)),
+      valueBoard: Array(10).fill(Array(10).fill(0)),
+      displayBoard: Array(10).fill(Array(10).fill(false)),
       bombs: 10
     }
     this.handleClick = this.handleClick.bind(this);
   }
 
-  initBoard() {
-    let visited = new Set();
+  initValueBoard() {
+    let visited = {};
     let bombSites = [];
     for (let i = 0; i < this.state.bombs; i++) {
-      let bombIdx = Math.floor(Math.random() * this.state.board.length);
-      while (visited.has(bombIdx)) {
-        bombIdx = Math.floor(Math.random() * this.state.board.length);
+      let bombRow = Math.floor(Math.random() * this.state.valueBoard.length);
+      let bombCol = Math.floor(Math.random() * this.state.valueBoard.length);
+      let coord = `${bombRow},${bombCol}`;
+      while (visited[coord] !== undefined) {
+        bombRow = Math.floor(Math.random() * this.state.valueBoard.length);
+        bombCol = Math.floor(Math.random() * this.state.valueBoard.length);
       }
-      bombSites.push(bombIdx);
-      visited.add(bombIdx);
+      bombSites.push([bombRow, bombCol]);
+      visited[coord] = true;
     }
-    let temp = JSON.parse(JSON.stringify(this.state.board));
+    let temp = JSON.parse(JSON.stringify(this.state.valueBoard));
+    const transformAdjacentSquares = (i, j) => {
+      if (i > 0) {
+        addSquareValues(i - 1, j);
+        if (j > 0) {
+          addSquareValues(i - 1, j - 1);
+        }
+        if (j < this.state.valueBoard.length - 1) {
+          addSquareValues(i - 1, j + 1);
+        }
+      }
+      if (i < this.state.valueBoard.length - 1) {
+        addSquareValues(i + 1, j);
+        if (j < this.state.valueBoard.length - 1) {
+          addSquareValues(i + 1, j + 1);
+        }
+        if (j > 0) {
+          addSquareValues(i + 1, j - 1);
+        }
+      }
+      if (j > 0) {
+        addSquareValues(i, j - 1);
+      }
+      if (j < this.state.valueBoard.length - 1) {
+        addSquareValues(i, j + 1);
+      }
+    };
+    const addSquareValues = (i, j) => {
+      if (temp[i][j] !== 'bomb') {
+        temp[i][j] += 1;
+      }
+    };
     bombSites.forEach((site) => {
-      temp[site] = 'bomb';
-    })
+      temp[site[0]][site[1]] = 'bomb';
+      transformAdjacentSquares(site[0], site[1]);
+    });
   }
 
-  handleClick(idx) {
-    if (this.state.board[idx] === 'bomb') {
+  handleClick(i, j) {
+    if (this.state.valueBoard[idx] === 'bomb') {
 
     }
   }
@@ -39,7 +75,12 @@ class Game extends React.Component {
 
 
   render() {
-    <Board board={this.state.board} game={this.state.game} handleClick={this.handleClick}/>
+    return(
+    <Board valueBoard={this.state.valueBoard} 
+          displayBoard={this.state.displayBoard} 
+          game={this.state.game} 
+          handleClick={this.handleClick}/>
+    )
   }
 }
 
