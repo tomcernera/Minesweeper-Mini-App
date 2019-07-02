@@ -12,6 +12,10 @@ class Game extends React.Component {
       bombs: 10
     }
     this.handleClick = this.handleClick.bind(this);
+    this.transformAdjacentSquares = this.transformAdjacentSquares.bind(this);
+    this.addSquareValues = this.addSquareValues.bind(this);
+    this.openSquares = this.openSquares.bind(this);
+    this.isOutOfBounds = this.isOutOfBounds.bind(this);
   }
 
   initValueBoard() {
@@ -29,46 +33,54 @@ class Game extends React.Component {
       visited[coord] = true;
     }
     let temp = JSON.parse(JSON.stringify(this.state.valueBoard));
-    const transformAdjacentSquares = (i, j) => {
-      if (i > 0) {
-        addSquareValues(i - 1, j);
-        if (j > 0) {
-          addSquareValues(i - 1, j - 1);
-        }
-        if (j < this.state.valueBoard.length - 1) {
-          addSquareValues(i - 1, j + 1);
-        }
-      }
-      if (i < this.state.valueBoard.length - 1) {
-        addSquareValues(i + 1, j);
-        if (j < this.state.valueBoard.length - 1) {
-          addSquareValues(i + 1, j + 1);
-        }
-        if (j > 0) {
-          addSquareValues(i + 1, j - 1);
-        }
-      }
-      if (j > 0) {
-        addSquareValues(i, j - 1);
-      }
-      if (j < this.state.valueBoard.length - 1) {
-        addSquareValues(i, j + 1);
-      }
-    };
-    const addSquareValues = (i, j) => {
-      if (temp[i][j] !== 'bomb') {
-        temp[i][j] += 1;
-      }
-    };
     bombSites.forEach((site) => {
       temp[site[0]][site[1]] = 'bomb';
-      transformAdjacentSquares(site[0], site[1]);
+      this.transformAdjacentSquares(site[0], site[1], temp, this.addSquareValues);
     });
   }
 
-  handleClick(i, j) {
-    if (this.state.valueBoard[idx] === 'bomb') {
+  addSquareValues(row, col, arr) {
+    if (arr[i][j] !== 'bomb' && !this.isOutOfBounds(row, col)) {
+      arr[i][j] += 1;
+    }
+  }
 
+  transformAdjacentSquares(row, col, arr, transform) {
+    transform(row, col - 1, arr);
+    transform(row, col + 1, arr);
+    transform(row - 1, col - 1, arr);
+    transform(row - 1, col, arr);
+    transform(row - 1, col + 1, arr);
+    transform(row + 1, col - 1, arr);
+    transform(row + 1, col, arr);
+    transform(row + 1, col + 1, arr);
+  }
+
+  openSquares(row, col, arr) {
+    if (this.state.valueBoard[row][col] === 'bomb' || this.isOutOfBounds(row, col)) {
+      return;
+    } else {
+      arr[row][col] = true;
+      this.transformAdjacentSquares(row, col, arr, this.openSquares);
+    }
+  }
+
+  isOutOfBounds(row, col) {
+    if (row < 0 || row >= this.state.valueBoard.length ||
+      col < 0 || col >= this.state.valueBoard.length) {
+      return true;
+    }
+    return false;
+  };
+
+  handleClick(i, j) {
+    if (this.state.displayBoard[i][j] === false) {  
+      if (this.state.valueBoard[i][j] === 'bomb') {
+        this.setState({game: 'loss'});
+      } else {
+        let temp = JSON.parse(JSON.stringify(this.state.displayBoard));
+        openSquares(i, j, temp);
+      }
     }
   }
 
