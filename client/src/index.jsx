@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Board from './components/Board.jsx';
+import PlayAgain from './components/PlayAgain.jsx';
 
 class Game extends React.Component {
   constructor(props) {
@@ -113,10 +114,13 @@ class Game extends React.Component {
 
   render() {
     return(
-    <Board valueBoard={this.state.valueBoard} 
-          displayBoard={this.state.displayBoard} 
-          game={this.state.game} 
-          handleClick={this.handleClick}/>
+      <React.Fragment>
+        { this.state.game === 'loss' ?  <PlayAgain game={this.state.game}/> : null }
+        <Board valueBoard={this.state.valueBoard} 
+              displayBoard={this.state.displayBoard} 
+              game={this.state.game} 
+              handleClick={this.handleClick}/>
+      </React.Fragment>
     )
   }
 }
