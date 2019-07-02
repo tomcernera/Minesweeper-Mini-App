@@ -12,8 +12,8 @@ var Board = props => (
           return <Square  key={[i,j]}
                           row={i} col={j} 
                           handleClick={props.handleClick} 
-                          valueBoard={props.valueBoard} 
-                          displayBoard={props.displayBoard}/>
+                          value={props.valueBoard[i][j]} 
+                          display={props.displayBoard[i][j]}/>
           })}
         </tr>
         )
