@@ -3,13 +3,14 @@ import Square from './Square.jsx'
 
 
 var Board = props => (
-  <table>
+  <table width="400" height="400">
     <tbody>
       {props.valueBoard.map((row,i) => {
         return (
         <tr key={i}>
           {row.map((col, j) => {
-          return <Square row={i} col={j} 
+          return <Square  key={[i,j]}
+                          row={i} col={j} 
                           handleClick={props.handleClick} 
                           valueBoard={props.valueBoard} 
                           displayBoard={props.displayBoard}/>
