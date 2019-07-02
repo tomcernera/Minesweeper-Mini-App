@@ -12,7 +12,7 @@ const displayTrue = {
 
 
 var Square = props => (
-  <td onClick={()=>(props.handleClick(props.row,props.col))} style={props.displayBoard ? displayTrue : displayFalse}>
+  <td onClick={()=>(props.handleClick(props.row,props.col))} style={props.display ? displayTrue : displayFalse}>
   </td>
 )
 
