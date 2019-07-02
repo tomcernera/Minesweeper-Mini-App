@@ -9,7 +9,7 @@ class Game extends React.Component {
       game: 'active',
       valueBoard: Array(10).fill(Array(10).fill(0)),
       displayBoard: Array(10).fill(Array(10).fill(false)),
-      bombs: 10
+      bombs: 10,
     }
     this.handleClick = this.handleClick.bind(this);
     this.initValueBoard = this.initValueBoard.bind(this);
@@ -17,6 +17,7 @@ class Game extends React.Component {
     this.addSquareValues = this.addSquareValues.bind(this);
     this.openSquares = this.openSquares.bind(this);
     this.isOutOfBounds = this.isOutOfBounds.bind(this);
+    this.checkWin = this.checkWin.bind(this);
   }
 
   initValueBoard() {
@@ -65,7 +66,10 @@ class Game extends React.Component {
       return;
     } else {
       arr[row][col] = true;
-      this.transformAdjacentSquares(row, col, arr, this.openSquares);
+      let newHidden = this.state.hidden - 1;
+      if (this.state.valueBoard[row][col] === 0) {
+        this.transformAdjacentSquares(row, col, arr, this.openSquares);
+      }
     }
   }
 
@@ -84,8 +88,21 @@ class Game extends React.Component {
       } else {
         let temp = JSON.parse(JSON.stringify(this.state.displayBoard));
         this.openSquares(i, j, temp);
-        this.setState({displayBoard: temp});
+        this.setState({displayBoard: temp}, () => {
+          this.checkWin();
+        });
       }
+    }
+  }
+  
+  checkWin() {
+    let hiddenSquares = this.state.displayBoard.reduce((acc, row) => {
+      return acc + row.reduce((prev, ele) => {
+        return ele === false ? prev + 1 : prev;
+      }, 0);
+    }, 0);
+    if (hiddenSquares === this.state.bombs) {
+      this.setState({game: 'win'});
     }
   }
 
