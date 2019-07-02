@@ -7,13 +7,33 @@ class Game extends React.Component {
     super(props);
     this.state = {
       game: 'active',
-      board: Array(100).fill(0)
+      board: Array(10).fill(Array(10).fill(0)),
+      bombs: 10
     }
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(idx) {
+  initBoard() {
+    let visited = new Set();
+    let bombSites = [];
+    for (let i = 0; i < this.state.bombs; i++) {
+      let bombIdx = Math.floor(Math.random() * this.state.board.length);
+      while (visited.has(bombIdx)) {
+        bombIdx = Math.floor(Math.random() * this.state.board.length);
+      }
+      bombSites.push(bombIdx);
+      visited.add(bombIdx);
+    }
+    let temp = JSON.parse(JSON.stringify(this.state.board));
+    bombSites.forEach((site) => {
+      temp[site] = 'bomb';
+    })
+  }
 
+  handleClick(idx) {
+    if (this.state.board[idx] === 'bomb') {
+
+    }
   }
 
 
