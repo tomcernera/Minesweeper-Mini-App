@@ -87,7 +87,12 @@ class Game extends React.Component {
 
 
   render() {
-    <Board board={this.state.board} game={this.state.game} handleClick={this.handleClick}/>
+    return(
+    <Board valueBoard={this.state.valueBoard} 
+          displayBoard={this.state.displayBoard} 
+          game={this.state.game} 
+          handleClick={this.handleClick}/>
+    )
   }
 }
 
