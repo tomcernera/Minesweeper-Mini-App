@@ -14,15 +14,18 @@ class Game extends React.Component {
   }
 
   initBoard() {
-    let visited = new Set();
+    let visited = {};
     let bombSites = [];
     for (let i = 0; i < this.state.bombs; i++) {
-      let bombIdx = Math.floor(Math.random() * this.state.board.length);
-      while (visited.has(bombIdx)) {
-        bombIdx = Math.floor(Math.random() * this.state.board.length);
+      let bombRow = Math.floor(Math.random() * this.state.board.length);
+      let bombCol = Math.floor(Math.random() * this.state.board.length);
+      let coord = `${bombRow},${bombCol}`;
+      while (visited[coord] !== undefined) {
+        bombRow = Math.floor(Math.random() * this.state.board.length);
+        bombCol = Math.floor(Math.random() * this.state.board.length);
       }
-      bombSites.push(bombIdx);
-      visited.add(bombIdx);
+      bombSites.push([bombRow, bombCol]);
+      visited[coord] = true;
     }
     let temp = JSON.parse(JSON.stringify(this.state.board));
     bombSites.forEach((site) => {
@@ -30,7 +33,7 @@ class Game extends React.Component {
     })
   }
 
-  handleClick(idx) {
+  handleClick(i, j) {
     if (this.state.board[idx] === 'bomb') {
 
     }
