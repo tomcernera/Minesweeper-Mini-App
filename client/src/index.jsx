@@ -12,6 +12,7 @@ class Game extends React.Component {
       bombs: 10
     }
     this.handleClick = this.handleClick.bind(this);
+    this.initValueBoard = this.initValueBoard.bind(this);
     this.transformAdjacentSquares = this.transformAdjacentSquares.bind(this);
     this.addSquareValues = this.addSquareValues.bind(this);
     this.openSquares = this.openSquares.bind(this);
@@ -28,6 +29,7 @@ class Game extends React.Component {
       while (visited[coord] !== undefined) {
         bombRow = Math.floor(Math.random() * this.state.valueBoard.length);
         bombCol = Math.floor(Math.random() * this.state.valueBoard.length);
+        coord = `${bombRow},${bombCol}`;
       }
       bombSites.push([bombRow, bombCol]);
       visited[coord] = true;
@@ -37,11 +39,12 @@ class Game extends React.Component {
       temp[site[0]][site[1]] = 'bomb';
       this.transformAdjacentSquares(site[0], site[1], temp, this.addSquareValues);
     });
+    this.setState({valueBoard: temp});
   }
 
   addSquareValues(row, col, arr) {
-    if (arr[i][j] !== 'bomb' && !this.isOutOfBounds(row, col)) {
-      arr[i][j] += 1;
+    if (!this.isOutOfBounds(row, col) && arr[row][col] !== 'bomb') {
+      arr[row][col] += 1;
     }
   }
 
@@ -57,7 +60,8 @@ class Game extends React.Component {
   }
 
   openSquares(row, col, arr) {
-    if (this.state.valueBoard[row][col] === 'bomb' || this.isOutOfBounds(row, col)) {
+    if (this.isOutOfBounds(row, col) || this.state.valueBoard[row][col] === 'bomb' 
+    || arr[row][col] === true) {
       return;
     } else {
       arr[row][col] = true;
@@ -79,11 +83,15 @@ class Game extends React.Component {
         this.setState({game: 'loss'});
       } else {
         let temp = JSON.parse(JSON.stringify(this.state.displayBoard));
-        openSquares(i, j, temp);
+        this.openSquares(i, j, temp);
+        this.setState({displayBoard: temp});
       }
     }
   }
 
+  componentDidMount() {
+    this.initValueBoard();
+  }
 
 
   render() {
