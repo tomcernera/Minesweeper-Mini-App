@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Board from './components/Board.jsx';
 import Menu from './components/Menu.jsx';
+import Axios from 'axios';
 
 class Game extends React.Component {
   constructor(props) {
@@ -13,7 +14,9 @@ class Game extends React.Component {
       player : '',
       valueBoard: [[]],
       displayBoard: [[]],
-      bombs: 0
+      startTime: null,
+      bombs: 0,
+      results: []
     }
     this.handleClick = this.handleClick.bind(this);
     this.initValueBoard = this.initValueBoard.bind(this);
@@ -26,6 +29,8 @@ class Game extends React.Component {
     this.getBombCount = this.getBombCount.bind(this);
     this.initBoard = this.initBoard.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleHardReset = this.handleHardReset.bind(this);
+    this.handleSameOptions = this.handleSameOptions.bind(this);
   }
 
   initBoard(type) {
@@ -114,7 +119,16 @@ class Game extends React.Component {
       }, 0);
     }, 0);
     if (hiddenSquares === this.state.bombs) {
-      this.setState({game: 'win'});
+      this.setState({game: 'win'}, () => {
+        let finishTime = Date.now();
+        Axios.post('scores', {
+          time: finishTime - this.state.startTime,
+          player: this.state.player,
+          size: this.state.size,
+          difficulty: this.state.difficulty
+        })
+        .catch(() => console.error('Could not post win'));
+      });
     }
   }
 
@@ -135,13 +149,22 @@ class Game extends React.Component {
     this.setState({game : 'active', 
       bombs: bombs, 
       valueBoard: valueBoard,
-      displayBoard: displayBoard}, this.initValueBoard);
+      displayBoard: displayBoard,
+      startTime: Date.now()}, this.initValueBoard);
   }
   
   handleChange(e) {
     let obj = {};
     obj[e.target.id] = e.target.id === 'size' ? parseInt(e.target.value) : e.target.value;
     this.setState(obj);
+  }
+
+  handleHardReset() {
+    this.setState({game: 'menu'});
+  }
+
+  handleSameOptions() {
+    this.handleSubmit();
   }
 
   render() {
@@ -152,8 +175,14 @@ class Game extends React.Component {
               displayBoard={this.state.displayBoard} 
               game={this.state.game}
               size={this.state.size} 
+<<<<<<< HEAD
               handleClick={this.handleClick}/>}
         <div>{this.state.game ==='win' ? <h1>Winner</h1> : this.state.game === 'loss' ? <h1>LOSER</h1> : null}</div>
+=======
+              handleClick={this.handleClick}
+              handleHardReset={this.handleHardReset}
+              handleSameOptions={this.handleSameOptions}/>}
+>>>>>>> master
       </React.Fragment>
     )
   }
