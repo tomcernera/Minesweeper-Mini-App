@@ -11,7 +11,8 @@ const displayTrue = {
 
 const squareDimension = (size) => {
   return {
-    width: `"${(size / 4)}%"`,
+    width: 400 / size,
+    height: 400 / size
   }
 }
 
