@@ -175,14 +175,10 @@ class Game extends React.Component {
               displayBoard={this.state.displayBoard} 
               game={this.state.game}
               size={this.state.size} 
-<<<<<<< HEAD
-              handleClick={this.handleClick}/>}
-        <div>{this.state.game ==='win' ? <h1>Winner</h1> : this.state.game === 'loss' ? <h1>LOSER</h1> : null}</div>
-=======
               handleClick={this.handleClick}
               handleHardReset={this.handleHardReset}
               handleSameOptions={this.handleSameOptions}/>}
->>>>>>> master
+              <div>{this.state.game ==='win' ? <h1>Winner</h1> : this.state.game === 'loss' ? <h1>LOSER</h1> : null}</div>
       </React.Fragment>
     )
   }
