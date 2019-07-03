@@ -22,6 +22,9 @@ class Game extends React.Component {
     this.isOutOfBounds = this.isOutOfBounds.bind(this);
     this.checkWin = this.checkWin.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.getBombCount = this.getBombCount.bind(this);
+    this.initBoard = this.initBoard.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   initBoard(type) {
@@ -125,18 +128,18 @@ class Game extends React.Component {
   }
 
   handleSubmit() {
-    let bombs = getBombCount();
-    let valueBoard = initBoard('value');
-    let displayBoard = initBoard('display');
+    let bombs = this.getBombCount();
+    let valueBoard = this.initBoard('value');
+    let displayBoard = this.initBoard('display');
     this.setState({game : 'active', 
       bombs: bombs, 
       valueBoard: valueBoard,
-      displayBoard: displayBoard});
+      displayBoard: displayBoard}, this.initValueBoard);
   }
   
   handleChange(e) {
     let obj = {};
-    obj[e.target.id] = e.target.value;
+    obj[e.target.id] = e.target.id === 'size' ? parseInt(e.target.value) : e.target.value;
     this.setState(obj);
   }
 
