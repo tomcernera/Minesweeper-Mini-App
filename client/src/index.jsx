@@ -9,7 +9,7 @@ class Game extends React.Component {
     this.state = {
       game: 'menu',
       size: 0,
-      difficulty: null,
+      difficulty: 'easy',
       valueBoard: [[]],
       displayBoard: [[]],
       bombs: 0
@@ -93,7 +93,7 @@ class Game extends React.Component {
   };
 
   handleClick(i, j) {
-    if (this.state.displayBoard[i][j] === false) {  
+    if (this.state.displayBoard[i][j] === false && this.state.game === 'active') {  
       if (this.state.valueBoard[i][j] === 'bomb') {
         this.setState({game: 'loss'});
       } else {
