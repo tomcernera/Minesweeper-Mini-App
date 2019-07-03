@@ -4,22 +4,21 @@ const menuStyle = {
   marginLeft : '100px'
 }
 
-
 var Menu = props => (
  <div style={menuStyle}>
 <h1>New Game</h1>
 <form>
   <label>
     Size:
-    <input type="text" name="name"/>
+    <input id="size" type="text" name="name" onChange={e=>{props.handleChange(e)}}/>
   </label>
 </form>
 <br/>
 <div>Difficulty
-<select>
-  <option>Easy</option>
-  <option>Medium</option>
-  <option>Hard</option>
+<select id="difficulty" onChange={e=>{props.handleChange(e)}}>
+  <option value="easy">Easy</option>
+  <option value="medium">Medium</option>
+  <option value="hard">Hard</option>
 </select>
 </div>
 <br/>
