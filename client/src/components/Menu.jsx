@@ -28,6 +28,12 @@ var Menu = props => (
 <h1>New Game</h1>
 <form>
   <label>
+    Player:
+    <input id="player" type="text" name="name" onChange={e=>{props.handleChange(e)}}/>
+  </label>
+</form>
+<form>
+  <label>
     Size:
     <input id="size" type="text" name="name" onChange={e=>{props.handleChange(e)}}/>
   </label>
