@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Board from './components/Board.jsx';
+import Menu from './components/Menu.jsx';
 
 class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      game: 'active',
+      game: 'menu',
       valueBoard: Array(10).fill(Array(10).fill(0)),
       displayBoard: Array(10).fill(Array(10).fill(false)),
       bombs: 10,
@@ -18,6 +19,7 @@ class Game extends React.Component {
     this.openSquares = this.openSquares.bind(this);
     this.isOutOfBounds = this.isOutOfBounds.bind(this);
     this.checkWin = this.checkWin.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   initValueBoard() {
@@ -110,13 +112,19 @@ class Game extends React.Component {
     this.initValueBoard();
   }
 
+  handleSubmit() {
+    this.setState({game : 'active'})
+  }
 
   render() {
     return(
-    <Board valueBoard={this.state.valueBoard} 
-          displayBoard={this.state.displayBoard} 
-          game={this.state.game} 
-          handleClick={this.handleClick}/>
+      <React.Fragment>
+        { this.state.game === 'menu' ?  <Menu handleSubmit={this.handleSubmit}/> :  
+        <Board valueBoard={this.state.valueBoard} 
+              displayBoard={this.state.displayBoard} 
+              game={this.state.game} 
+              handleClick={this.handleClick}/>}
+      </React.Fragment>
     )
   }
 }

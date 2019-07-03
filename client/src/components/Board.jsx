@@ -13,7 +13,8 @@ var Board = props => (
                           row={i} col={j} 
                           handleClick={props.handleClick} 
                           value={props.valueBoard[i][j]} 
-                          display={props.displayBoard[i][j]}/>
+                          display={props.displayBoard[i][j]}
+                          game = {props.game}/>
           })}
         </tr>
         )
