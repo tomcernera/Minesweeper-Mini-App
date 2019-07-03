@@ -14,9 +14,14 @@ const gameLoss = {
   textAlign : 'center'
 }
 
+const gameWin = {
+  background : 'lightGreen',
+  textAlign : 'center'
+}
+
 var Square = props => (
   <td  width="40" height="40" onClick={()=>(props.handleClick(props.row,props.col))} 
-    style={props.game === 'loss' ? gameLoss : props.display ? displayTrue : displayFalse}>
+    style={props.game === 'loss' ? gameLoss : props.game ==='win' ? gameWin : props.display ? displayTrue : displayFalse}>
     {props.display ? props.value === 0 ? '' : props.value : ''}
   </td>
 )
