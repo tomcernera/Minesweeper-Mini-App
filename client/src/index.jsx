@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Board from './components/Board.jsx';
 import Menu from './components/Menu.jsx';
 import Axios from 'axios';
+import Highscore from './components/Highscore.jsx'
 
 class Game extends React.Component {
   constructor(props) {
@@ -187,7 +188,9 @@ class Game extends React.Component {
               handleClick={this.handleClick}
               handleHardReset={this.handleHardReset}
               handleSameOptions={this.handleSameOptions}/>}
+       
               <div>{this.state.game ==='win' ? <h1>Winner</h1> : this.state.game === 'loss' ? <h1>LOSER</h1> : null}</div>
+              <Highscore results={this.state.results} size={this.state.size} difficulty={this.state.difficulty}/>
       </React.Fragment>
     )
   }
