@@ -10,6 +10,7 @@ class Game extends React.Component {
       game: 'menu',
       size: 0,
       difficulty: 'easy',
+      player : '',
       valueBoard: [[]],
       displayBoard: [[]],
       bombs: 0
