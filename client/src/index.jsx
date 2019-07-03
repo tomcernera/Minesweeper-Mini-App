@@ -15,7 +15,8 @@ class Game extends React.Component {
       valueBoard: [[]],
       displayBoard: [[]],
       startTime: null,
-      bombs: 0
+      bombs: 0,
+      results: []
     }
     this.handleClick = this.handleClick.bind(this);
     this.initValueBoard = this.initValueBoard.bind(this);
@@ -122,10 +123,11 @@ class Game extends React.Component {
         let finishTime = Date.now();
         Axios.post('scores', {
           time: finishTime - this.state.startTime,
+          player: this.state.player,
           size: this.state.size,
           difficulty: this.state.difficulty
-        }).then(() => console.log('success'))
-        .catch(() => console.error('failure'));
+        })
+        .catch(() => console.error('Could not post win'));
       });
     }
   }

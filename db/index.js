@@ -5,7 +5,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/highscores');
 let scoresSchema = new mongoose.Schema({
   time: Number,
   size: Number,
-  difficulty: String
+  difficulty: String,
+  player: String
 });
 
 let Scores = new mongoose.model('Scores', scoresSchema);
