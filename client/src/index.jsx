@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Board from './components/Board.jsx';
 import Menu from './components/Menu.jsx';
+import Axios from 'axios';
 
 class Game extends React.Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class Game extends React.Component {
       player : '',
       valueBoard: [[]],
       displayBoard: [[]],
+      startTime: null,
       bombs: 0
     }
     this.handleClick = this.handleClick.bind(this);
@@ -116,7 +118,15 @@ class Game extends React.Component {
       }, 0);
     }, 0);
     if (hiddenSquares === this.state.bombs) {
-      this.setState({game: 'win'});
+      this.setState({game: 'win'}, () => {
+        let finishTime = Date.now();
+        Axios.post('scores', {
+          time: finishTime - this.state.startTime,
+          size: this.state.size,
+          difficulty: this.state.difficulty
+        }).then(() => console.log('success'))
+        .catch(() => console.error('failure'));
+      });
     }
   }
 
@@ -137,7 +147,8 @@ class Game extends React.Component {
     this.setState({game : 'active', 
       bombs: bombs, 
       valueBoard: valueBoard,
-      displayBoard: displayBoard}, this.initValueBoard);
+      displayBoard: displayBoard,
+      startTime: Date.now()}, this.initValueBoard);
   }
   
   handleChange(e) {
