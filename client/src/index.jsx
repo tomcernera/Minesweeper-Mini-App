@@ -149,7 +149,8 @@ class Game extends React.Component {
         { this.state.game === 'menu' ?  <Menu handleSubmit={this.handleSubmit} handleChange={this.handleChange}/> :  
         <Board valueBoard={this.state.valueBoard} 
               displayBoard={this.state.displayBoard} 
-              game={this.state.game} 
+              game={this.state.game}
+              size={this.state.size} 
               handleClick={this.handleClick}/>}
       </React.Fragment>
     )
