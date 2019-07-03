@@ -1,15 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Board from './components/Board.jsx';
+import Menu from './components/Menu.jsx';
+import Axios from 'axios';
 
 class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      game: 'active',
-      valueBoard: Array(10).fill(Array(10).fill(0)),
-      displayBoard: Array(10).fill(Array(10).fill(false)),
-      bombs: 10,
+      game: 'menu',
+      size: 0,
+      difficulty: 'easy',
+      player : '',
+      valueBoard: [[]],
+      displayBoard: [[]],
+      startTime: null,
+      bombs: 0,
+      results: []
     }
     this.handleClick = this.handleClick.bind(this);
     this.initValueBoard = this.initValueBoard.bind(this);
@@ -18,6 +25,16 @@ class Game extends React.Component {
     this.openSquares = this.openSquares.bind(this);
     this.isOutOfBounds = this.isOutOfBounds.bind(this);
     this.checkWin = this.checkWin.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.getBombCount = this.getBombCount.bind(this);
+    this.initBoard = this.initBoard.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleHardReset = this.handleHardReset.bind(this);
+    this.handleSameOptions = this.handleSameOptions.bind(this);
+  }
+
+  initBoard(type) {
+    return Array(this.state.size).fill(Array(this.state.size).fill(type === 'value' ? 0 : false));
   }
 
   initValueBoard() {
@@ -82,7 +99,7 @@ class Game extends React.Component {
   };
 
   handleClick(i, j) {
-    if (this.state.displayBoard[i][j] === false) {  
+    if (this.state.displayBoard[i][j] === false && this.state.game === 'active') {  
       if (this.state.valueBoard[i][j] === 'bomb') {
         this.setState({game: 'loss'});
       } else {
@@ -102,21 +119,66 @@ class Game extends React.Component {
       }, 0);
     }, 0);
     if (hiddenSquares === this.state.bombs) {
-      this.setState({game: 'win'});
+      this.setState({game: 'win'}, () => {
+        let finishTime = Date.now();
+        Axios.post('scores', {
+          time: finishTime - this.state.startTime,
+          player: this.state.player,
+          size: this.state.size,
+          difficulty: this.state.difficulty
+        })
+        .catch(() => console.error('Could not post win'));
+      });
     }
   }
 
-  componentDidMount() {
-    this.initValueBoard();
+  getBombCount() {
+    if (this.state.difficulty === 'easy') {
+      return Math.floor(Math.pow(this.state.size, 2) / 10);
+    } else if (this.state.difficulty === 'medium') {
+      return Math.floor(Math.pow(this.state.size, 2) / 4);
+    } else if (this.state.difficulty === 'hard') {
+      return Math.floor(4 * Math.pow(this.state.size, 2) / 10);
+    }
   }
 
+  handleSubmit() {
+    let bombs = this.getBombCount();
+    let valueBoard = this.initBoard('value');
+    let displayBoard = this.initBoard('display');
+    this.setState({game : 'active', 
+      bombs: bombs, 
+      valueBoard: valueBoard,
+      displayBoard: displayBoard,
+      startTime: Date.now()}, this.initValueBoard);
+  }
+  
+  handleChange(e) {
+    let obj = {};
+    obj[e.target.id] = e.target.id === 'size' ? parseInt(e.target.value) : e.target.value;
+    this.setState(obj);
+  }
+
+  handleHardReset() {
+    this.setState({game: 'menu'});
+  }
+
+  handleSameOptions() {
+    this.handleSubmit();
+  }
 
   render() {
     return(
-    <Board valueBoard={this.state.valueBoard} 
-          displayBoard={this.state.displayBoard} 
-          game={this.state.game} 
-          handleClick={this.handleClick}/>
+      <React.Fragment>
+        { this.state.game === 'menu' ?  <Menu handleSubmit={this.handleSubmit} handleChange={this.handleChange}/> :  
+        <Board valueBoard={this.state.valueBoard} 
+              displayBoard={this.state.displayBoard} 
+              game={this.state.game}
+              size={this.state.size} 
+              handleClick={this.handleClick}
+              handleHardReset={this.handleHardReset}
+              handleSameOptions={this.handleSameOptions}/>}
+      </React.Fragment>
     )
   }
 }
