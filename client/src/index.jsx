@@ -153,6 +153,7 @@ class Game extends React.Component {
               game={this.state.game}
               size={this.state.size} 
               handleClick={this.handleClick}/>}
+        <div>{this.state.game ==='win' ? <h1>Winner</h1> : this.state.game === 'loss' ? <h1>LOSER</h1> : null}</div>
       </React.Fragment>
     )
   }
