@@ -133,7 +133,7 @@ class Game extends React.Component {
               difficulty: this.state.difficulty
             }
           }).then(({data}) => {
-            console.log(data);
+            this.setState({results: data});
           });
         })
         .catch(() => console.error('Could not post win'));
