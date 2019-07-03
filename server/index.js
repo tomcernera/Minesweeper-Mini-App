@@ -2,7 +2,7 @@ const express = require('express')
 const path = require('path')
 const app = express()
 const bodyParser = require('body-parser');
-const { createScore } = require('../db/index.js');
+const { createScore, readAllScores } = require('../db/index.js');
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname,'../client/dist')));
@@ -16,7 +16,7 @@ app.post('/scores', (req, res) => {
 
 app.get('/scores', (req, res) => {
   let {size, difficulty} = req.query;
-  readScore(size, difficulty).then((results) => {
+  readAllScores(size, difficulty).then((results) => {
     res.status(200).send(results);
   }).catch(() => res.sendStatus(500));
 });
