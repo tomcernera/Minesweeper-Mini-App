@@ -21,6 +21,11 @@ const gameLoss = {
   textAlign : 'center'
 }
 
+const gameWin = {
+  background : 'lightGreen',
+  textAlign : 'center'
+}
+
 var Square = props => (
   <td onClick={() => (props.handleClick(props.row,props.col))} 
     style={props.game === 'loss' ? 
