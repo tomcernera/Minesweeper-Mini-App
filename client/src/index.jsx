@@ -8,9 +8,11 @@ class Game extends React.Component {
     super(props);
     this.state = {
       game: 'menu',
-      valueBoard: Array(10).fill(Array(10).fill(0)),
-      displayBoard: Array(10).fill(Array(10).fill(false)),
-      bombs: 10,
+      size: 0,
+      difficulty: null,
+      valueBoard: [[]],
+      displayBoard: [[]],
+      bombs: 0
     }
     this.handleClick = this.handleClick.bind(this);
     this.initValueBoard = this.initValueBoard.bind(this);
@@ -20,6 +22,10 @@ class Game extends React.Component {
     this.isOutOfBounds = this.isOutOfBounds.bind(this);
     this.checkWin = this.checkWin.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  initBoard(type) {
+    return Array(this.state.size).fill(Array(this.state.size).fill(type === 'value' ? 0 : false));
   }
 
   initValueBoard() {
@@ -108,18 +114,36 @@ class Game extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.initValueBoard();
+  getBombCount() {
+    if (this.state.difficulty === 'easy') {
+      return Math.floor(Math.pow(this.state.size, 2) / 10);
+    } else if (this.state.difficulty === 'medium') {
+      return Math.floor(Math.pow(this.state.size, 2) / 4);
+    } else if (this.state.difficulty === 'hard') {
+      return Math.floor(4 * Math.pow(this.state.size, 2) / 10);
+    }
   }
 
   handleSubmit() {
-    this.setState({game : 'active'})
+    let bombs = getBombCount();
+    let valueBoard = initBoard('value');
+    let displayBoard = initBoard('display');
+    this.setState({game : 'active', 
+      bombs: bombs, 
+      valueBoard: valueBoard,
+      displayBoard: displayBoard});
+  }
+  
+  handleChange(e) {
+    let obj = {};
+    obj[e.target.id] = e.target.value;
+    this.setState(obj);
   }
 
   render() {
     return(
       <React.Fragment>
-        { this.state.game === 'menu' ?  <Menu handleSubmit={this.handleSubmit}/> :  
+        { this.state.game === 'menu' ?  <Menu handleSubmit={this.handleSubmit} handleChange={this.handleChange}/> :  
         <Board valueBoard={this.state.valueBoard} 
               displayBoard={this.state.displayBoard} 
               game={this.state.game} 
