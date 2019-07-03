@@ -11,7 +11,8 @@ var Board = props => (
           {row.map((col, j) => {
           return <Square  key={[i,j]}
                           row={i} col={j} 
-                          handleClick={props.handleClick} 
+                          handleClick={props.handleClick}
+                          size={props.size} 
                           value={props.valueBoard[i][j]} 
                           display={props.displayBoard[i][j]}
                           game = {props.game}/>
