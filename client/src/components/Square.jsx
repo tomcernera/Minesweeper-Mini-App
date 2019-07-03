@@ -27,16 +27,12 @@ const gameWin = {
 }
 
 var Square = props => (
-<<<<<<< HEAD
-  <td onClick={()=>(props.handleClick(props.row,props.col))} style={props.display ? displayTrue : displayFalse}>
-=======
   <td onClick={() => (props.handleClick(props.row,props.col))} 
     style={props.game === 'loss' ? 
       Object.assign(squareDimension(props.size), gameLoss) : props.display ? 
       Object.assign(squareDimension(props.size), displayTrue) : 
       Object.assign(squareDimension(props.size), displayFalse)}>
     {props.display ? props.value === 0 ? '' : props.value : ''}
->>>>>>> 939a073c7e346e8f3500ff8049ee46bf65f0684e
   </td>
 )
 

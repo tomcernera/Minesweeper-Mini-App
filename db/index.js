@@ -17,7 +17,7 @@ module.exports = {
   },
 
   readAllScores: (size, difficulty) => {
-    return Scores.find({size: size, difficulty: difficulty});
+    return Scores.find({size: size, difficulty: difficulty}).sort({time: 1});
   }
 }
 

@@ -121,11 +121,20 @@ class Game extends React.Component {
     if (hiddenSquares === this.state.bombs) {
       this.setState({game: 'win'}, () => {
         let finishTime = Date.now();
-        Axios.post('scores', {
+        Axios.post('/scores', {
           time: finishTime - this.state.startTime,
           player: this.state.player,
           size: this.state.size,
           difficulty: this.state.difficulty
+        }).then(() => {
+          Axios.get('/scores', {
+            params: {
+              size: this.state.size,
+              difficulty: this.state.difficulty
+            }
+          }).then(({data}) => {
+            console.log(data);
+          });
         })
         .catch(() => console.error('Could not post win'));
       });
