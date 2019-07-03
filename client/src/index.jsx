@@ -25,6 +25,8 @@ class Game extends React.Component {
     this.getBombCount = this.getBombCount.bind(this);
     this.initBoard = this.initBoard.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleHardReset = this.handleHardReset.bind(this);
+    this.handleSameOptions = this.handleSameOptions.bind(this);
   }
 
   initBoard(type) {
@@ -143,6 +145,14 @@ class Game extends React.Component {
     this.setState(obj);
   }
 
+  handleHardReset() {
+    this.setState({game: 'menu'});
+  }
+
+  handleSameOptions() {
+    this.handleSubmit();
+  }
+
   render() {
     return(
       <React.Fragment>
@@ -151,7 +161,9 @@ class Game extends React.Component {
               displayBoard={this.state.displayBoard} 
               game={this.state.game}
               size={this.state.size} 
-              handleClick={this.handleClick}/>}
+              handleClick={this.handleClick}
+              handleHardReset={this.handleHardReset}
+              handleSameOptions={this.handleSameOptions}/>}
       </React.Fragment>
     )
   }
